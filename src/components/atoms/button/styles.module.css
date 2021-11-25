@@ -1,0 +1,19 @@
+.button {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    box-shadow: 0 0 4px hsla(0 0% 0% / 0.15);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0 0.5rem;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.button:active {
+    background-color: var(--white-color);
+    color: var(--black-color);
+}
