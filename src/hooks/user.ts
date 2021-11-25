@@ -4,7 +4,7 @@ import { collection, doc, getDocs, setDoc, deleteDoc } from "@firebase/firestore
 import { useCallback } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { getDB } from "../lib/firebase"
-import { getUserIdsInRoom } from "../lib/firestore"
+import { getUserIdsInRoom, isRoomRemovable } from "../lib/firestore"
 
 type UserRoomInteraction = {
     roomId: string
@@ -23,7 +23,7 @@ export const useUser = () => {
             if (!usersInRoom.includes(user.uid)) {
                 return setDoc(roomRef, {
                     usersInRoom: usersInRoom.concat(user.uid)
-                }, { merge: true, mergeFields: ['name', 'usersInRoom'] })
+                }, { merge: true, mergeFields: ['usersInRoom'] })
             }
         } catch (err) {
             throw err
@@ -34,15 +34,15 @@ export const useUser = () => {
         if (!user) return
         try {
             const roomRef = doc(getDB(), `/rooms/${roomId}`)
-            const usersInRoom = await getUserIdsInRoom({ roomId })
+            const [usersInRoom, roomShouldBeRemoved] = await Promise.all([getUserIdsInRoom({ roomId }), isRoomRemovable({ roomId })])
             if (usersInRoom.includes(user.uid)) {
                 usersInRoom.splice(usersInRoom.indexOf(user.uid), 1)
-                if (!usersInRoom.length) { // If room is empty, delete it
+                if (!usersInRoom.length && roomShouldBeRemoved) { // If room is empty and removable, delete it
                     return deleteDoc(roomRef)
                 }
                 return setDoc(roomRef, {
                     usersInRoom
-                }, { merge: true, mergeFields: ['name', 'usersInRoom'] })
+                }, { merge: true, mergeFields: ['usersInRoom'] })
             }
         } catch (err) {
             throw err
@@ -56,12 +56,12 @@ export const useUser = () => {
                 if (doc.data().usersInRoom.includes(user.uid)) {
                     const prevUsers = doc.data().usersInRoom as string[]
                     prevUsers.splice(prevUsers.indexOf(user.uid), 1)
-                    if (!prevUsers.length) { // If room is empty, delete it
+                    if (!prevUsers.length && doc.data().shouldBeRemoved) { // If room is empty and removable, delete it
                         await deleteDoc(doc.ref)
                     }
                     await setDoc(doc.ref, {
                         usersInRoom: prevUsers
-                    }, { merge: true, mergeFields: ['name', 'usersInRoom'] })
+                    }, { merge: true, mergeFields: ['usersInRoom'] })
                 }
             })
             return
