@@ -24,7 +24,7 @@ export default function App() {
                     uid,
                     name: displayName,
                     displayPic: photoURL
-                })
+                }, {merge: true, mergeFields: ['uid', 'name', 'displayPic', 'roomCreated']})
             }
         })()
     }, [])
