@@ -55,8 +55,10 @@
   --tr-normal: all 0.5s ease-in-out;
   --tr-fast: all 0.25s linear;
   /* All colors */
+  --color-blue-dark: #0d5d7a;
   --color-blue: #0a6b8e;
   --color-blue-light: #1e7696;
+  --color-orange-dark: #dd9000;
   --color-orange: #eea319;
   --color-orange-light: #ffbf49;
   --color-white: #fdfdfd;
@@ -73,6 +75,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --color-accent-dark: var(--color-blue-dark);
     --color-accent: var(--color-blue);
     --color-accent-light: var(--color-blue-light);
     --color-bg: var(--color-black);
@@ -84,6 +87,7 @@
 
 @media (prefers-color-scheme: light) {
   :root {
+    --color-accent-dark: var(--color-orange-dark);
     --color-accent: var(--color-orange);
     --color-accent-light: var(--color-orange-light);
     --color-bg: var(--color-white);
@@ -121,6 +125,8 @@ body, h1, h2, h3, h4, h5, p, button, textarea, caption, section {
 input, button, textarea {
   font-family: inherit;
   font-size: inherit;
+  outline: none;
+  border: none;
 }
 
 /* Setting font sizes */
