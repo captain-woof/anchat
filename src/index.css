@@ -57,8 +57,8 @@
   /* All colors */
   --color-blue: #0a6b8e;
   --color-blue-light: #1e7696;
-  --color-orange: #e7a01a;
-  --color-orange-light: #f0ad30;
+  --color-orange: #eea319;
+  --color-orange-light: #ffbf49;
   --color-white: #fdfdfd;
   --color-white-light: #ffffff;
   --color-white-dark: #fafafa;
@@ -103,6 +103,7 @@ html, body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--ff-normal);
+  position: relative;
 }
 
 /* Border box */

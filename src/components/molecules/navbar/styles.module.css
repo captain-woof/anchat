@@ -1,13 +1,54 @@
-.header {
+.header_and_progress {
     min-height: 3rem;
     height: max-content;
     position: sticky;
     width: 100%;
-    padding: var(--sp-400);
+    top: 0;
+    left: 0;
+}
+
+.progress_bar_container {
+    height: 4px;
+    position: relative;
+    width: 100%;
+    z-index: 100;
+    overflow: hidden;
+}
+
+@keyframes progressbar {
+    0% {
+        transform: translateX(0vw);
+    }
+    50% {
+        width: 60%;
+    }
+    100% {
+        transform: translateX(calc(100vw - 50vw));
+    }
+}
+
+.progress_bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--color-accent), var(--color-accent-light));
+    width: 50%;
+    animation: progressbar 1s ease-in-out infinite alternate;
+    border-radius: 50rem;
+    transition: var(--tr-slow);
+    opacity: 0;
+}
+
+.progress_bar.show {
+    opacity: 1;
+}
+
+.header {
+    padding: var(--sp-300) var(--sp-400);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0 0.5rem;
     z-index: 99;
+    background-color: var(--color-bg);
+    position: relative;
 }
 
 @media (min-width: 768px){
