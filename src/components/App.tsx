@@ -1,14 +1,12 @@
 import { getApp } from '@firebase/app'
 import { getAuth, getRedirectResult } from '@firebase/auth'
 import { doc, setDoc } from '@firebase/firestore'
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useUser } from '../hooks/user'
 import { getDB } from '../lib/firebase'
 import Navbar from './molecules/navbar'
-import LandingPage from './pages/landing'
-import Room from './pages/room'
-import Rooms from './pages/rooms'
+import Loading from './pages/loading'
 import PageProgressProvider from './providers/page_progress'
 
 export default function App() {
@@ -24,7 +22,7 @@ export default function App() {
                     uid,
                     name: displayName,
                     displayPic: photoURL
-                }, {merge: true, mergeFields: ['uid', 'name', 'displayPic', 'roomCreated']})
+                }, { merge: true, mergeFields: ['uid', 'name', 'displayPic', 'roomCreated'] })
             }
         })()
     }, [])
@@ -33,11 +31,18 @@ export default function App() {
         <BrowserRouter>
             <PageProgressProvider>
                 <Navbar />
-                <Routes>
-                    <Route path="/" element={!user ? <LandingPage /> : <Rooms />} />
-                    <Route path='/room/:roomId' element={<Room />} />
-                </Routes>
+                <Suspense fallback={<Loading />}>
+                    <Routes>
+                        <Route path="/" element={!user ? <LandingPage /> : <Rooms />} />
+                        <Route path='/room/:roomId' element={<Room />} />
+                    </Routes>
+                </Suspense>
             </PageProgressProvider>
         </BrowserRouter>
     )
 }
+
+// Lazy comps
+const LandingPage = lazy(() => import('./pages/landing'))
+const Rooms = lazy(() => import('./pages/rooms'))
+const Room = lazy(() => import('./pages/room'))
