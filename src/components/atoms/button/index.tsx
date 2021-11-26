@@ -5,12 +5,13 @@ interface IButton {
     children?: ReactNode
     buttonProps?: ButtonHTMLAttributes<HTMLButtonElement>
     icon?: ReactNode
-    label: string
+    label: string,
+    style?: React.CSSProperties
 }
 
-export default function Button({ children, buttonProps, icon, label }: IButton) {
+export default function Button({ children, buttonProps, icon, label, style }: IButton) {
     return (
-        <button {...buttonProps} className={styles.button} aria-labelledby={label}>
+        <button {...buttonProps} className={styles.button} aria-labelledby={label} style={style}>
             {children ?? null}
             {icon ?? null}
         </button>
