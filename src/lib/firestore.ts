@@ -12,7 +12,7 @@ export const sendText = async ({ body, uid, roomId }: SendMsg) => {
     try {
         return await addDoc(messagesRef, {
             body,
-            uid,
+            sender: doc(getDB(), `/users/${uid}`),
             timestamp: new Timestamp(Date.now() / 1000, 0),
             room: doc(getDB(), `/rooms/${roomId}`)
         })

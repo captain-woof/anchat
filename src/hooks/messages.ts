@@ -13,8 +13,7 @@ export const useMessages = (roomId: string, limitMsgs: number = 25) => {
             ? messages.docs.map((message) => ({
                 ...message.data(),
                 timestamp: message.data().timestamp.toMillis(),
-                id: message.id,
-                ref: message.ref
+                id: message.id
             } as Message))
             : [],
         pending,
