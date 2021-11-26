@@ -1,10 +1,11 @@
 .header_and_progress {
     min-height: 3rem;
     height: max-content;
-    position: sticky;
+    position: fixed;
     width: 100%;
     top: 0;
     left: 0;
+    z-index: 99;
 }
 
 .progress_bar_container {
