@@ -1,6 +1,6 @@
 .call_to_action_container{
     position: relative;
-    height: 100vh;
+    height: calc(100vh - var(--height-navbar));
     width: 100%;
     display: flex;
     flex-direction: column;
