@@ -1,0 +1,62 @@
+.wrapper {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    z-index: 100;
+    margin: 0;
+}
+
+/* Appear animation */
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0.95;
+    }
+}
+
+.backdrop {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: var(--color-black-light);
+    animation: appear 0.5s linear both;
+    margin: 0;
+}
+
+.dialog_box {
+    position: relative;
+    z-index: 101;
+    height: fit-content;
+    width: clamp(320px, 30vw, 360px);
+    background-color: var(--color-bg-ele);
+    box-shadow: var(--color-black-dark);
+    padding: var(--sp-500) var(--sp-400);
+    opacity: 1;
+    border-radius: 8px;
+}
+
+.close_icon {
+    position: absolute;
+    fill: var(--color-text);
+    top: var(--sp-400);
+    right: var(--sp-400);
+    height: 1.35rem;
+    width: 1.35rem;
+    cursor: pointer;
+    z-index: 102;
+}
+
+.close_icon:hover {
+    fill: var(--color-grey);
+}
