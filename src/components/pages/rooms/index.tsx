@@ -8,7 +8,7 @@ import { useCallback, useState } from 'react'
 import RoomsDialog from './rooms_dialog'
 import { useUser } from '../../../hooks/user'
 import { usePageProgress } from '../../../hooks/page_progress'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function Rooms() {
     const { rooms } = useRooms()
@@ -37,7 +37,7 @@ export default function Rooms() {
     const handleDeleteRoom = useCallback(async () => {
         setProgress(true)
         const deleteRes = await deleteRoom()
-        if(typeof deleteRes === 'boolean' && !deleteRes) setErrorShow(true)
+        if (typeof deleteRes === 'boolean' && !deleteRes) setErrorShow(true)
         setProgress(false)
     }, [roomCreated])
 
@@ -67,17 +67,19 @@ export default function Rooms() {
                     .filter((room) => !room.shouldBeRemoved)
                     .sort((room1, room2) => room1.name < room2.name ? -1 : 1)
                     .map((globalRoom) => (
-                        <button className={styles.global_room_button} key={globalRoom.id}>
-                            <div className={styles.global_icon}>
-                                <GlobalIcon />
-                            </div>
-                            <span className={styles.global_room_button_text}>
-                                {globalRoom.name}
-                            </span>
-                            <span className={styles.global_room_button_people_num}>
-                                <PeopleIcon /> {globalRoom.usersInRoom.length}
-                            </span>
-                        </button>
+                        <Link to={`../room/${globalRoom.id}`} key={globalRoom.id}>
+                            <button className={styles.global_room_button}>
+                                <div className={styles.global_icon}>
+                                    <GlobalIcon />
+                                </div>
+                                <span className={styles.global_room_button_text}>
+                                    {globalRoom.name}
+                                </span>
+                                <span className={styles.global_room_button_people_num}>
+                                    <PeopleIcon /> {Object.keys(globalRoom.usersInRoom).length}
+                                </span>
+                            </button>
+                        </Link>
                     ))
                 }
                 {/* Create room button */}

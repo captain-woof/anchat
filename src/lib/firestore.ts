@@ -1,5 +1,6 @@
-import { Timestamp, addDoc, doc, getDoc } from 'firebase/firestore'
-import { getDB, messagesRef, roomsRef } from './firebase'
+import { doc, getDoc } from 'firebase/firestore'
+import { User } from '../../types/user'
+import { getDB } from './firebase'
 
 // Function to get num of users in a room
 type GetUsersInRoom = {
@@ -9,18 +10,20 @@ type GetUsersInRoom = {
 export const getNumOfUsersInRoom = async ({ roomId }: GetUsersInRoom) => {
     try {
         const roomRef = doc(getDB(), `/rooms/${roomId}`)
-        return (await getDoc(roomRef)).data()?.usersInRoom.length as number
+        const usersInRoom = (await getDoc(roomRef)).data()?.usersInRoom as { [key: string]: User }
+        console.log(`Users in room: ${usersInRoom}`)
+        return Object.keys(usersInRoom).length
     } catch (err) {
-        throw 0
+        return 0
     }
 }
 
-export const getUserIdsInRoom = async ({ roomId }: GetUsersInRoom) => {
+export const getUsersInRoom = async ({ roomId }: GetUsersInRoom) => {
     try {
         const roomRef = doc(getDB(), `/rooms/${roomId}`)
-        return (await getDoc(roomRef)).data()?.usersInRoom as string[]
+        return (await getDoc(roomRef)).data()?.usersInRoom as { [key: string]: User }
     } catch (err) {
-        return []
+        return {}
     }
 }
 

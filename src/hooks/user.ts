@@ -1,10 +1,10 @@
 import { getApp } from "@firebase/app"
 import { getAuth } from "@firebase/auth"
-import { collection, doc, getDocs, setDoc, deleteDoc, DocumentReference, DocumentData, addDoc, Timestamp, query, where, getDoc } from "@firebase/firestore"
+import { collection, doc, getDocs, setDoc, deleteDoc, DocumentReference, DocumentData, addDoc, Timestamp, query, where, getDoc, updateDoc } from "@firebase/firestore"
 import { useCallback, useMemo } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { getDB, messagesRef, roomsRef } from "../lib/firebase"
-import { getUserIdsInRoom } from "../lib/firestore"
+import { getUsersInRoom } from "../lib/firestore"
 import { useDocument } from 'react-firebase-hooks/firestore'
 
 export const useUser = () => {
@@ -19,12 +19,16 @@ export const useUser = () => {
         if (!user) return null
         try {
             const roomRef = doc(getDB(), `/rooms/${roomId}`)
-            const usersInRoom = await getUserIdsInRoom({ roomId })
-            if (!usersInRoom.includes(user.uid)) {
-                return setDoc(roomRef, {
-                    usersInRoom: usersInRoom.concat(user.uid)
-                }, { merge: true, mergeFields: ['usersInRoom'] })
-            }
+            return setDoc(roomRef, {
+                usersInRoom: {
+                    [user.uid]: {
+                        name: user.displayName || '',
+                        roomCreated: null,
+                        displayPic: user.photoURL || '',
+                        uid: user.uid
+                    }
+                }
+            }, { merge: true, mergeFields: ['usersInRoom'] })
         } catch (err) {
             throw err
         }
@@ -73,14 +77,11 @@ export const useUser = () => {
         if (!user) return null
         try {
             const roomRef = doc(getDB(), `/rooms/${roomId}`)
-            const usersInRoom = await getUserIdsInRoom({ roomId })
-            if (usersInRoom.includes(user.uid)) {
-                usersInRoom.splice(usersInRoom.indexOf(user.uid), 1)
-                return await setDoc(roomRef, {
-                    usersInRoom
-                }, { merge: true, mergeFields: ['usersInRoom'] })
-            }
-            return null
+            const usersInRoom = await getUsersInRoom({ roomId })
+            delete usersInRoom[user.uid]
+            return updateDoc(roomRef, {
+                usersInRoom
+            })
         } catch (err) {
             throw err
         }
@@ -92,15 +93,11 @@ export const useUser = () => {
         const removeUserFromRoomsPromises: Promise<any>[] = []
         try {
             (await getDocs(collection(getDB(), 'rooms'))).docs.forEach((roomDoc) => {
-                if (roomDoc.data().usersInRoom.includes(user.uid)) {
-                    const prevUsers = roomDoc.data().usersInRoom as string[]
-                    prevUsers.splice(prevUsers.indexOf(user.uid), 1)
-                    removeUserFromRoomsPromises.push(setDoc(roomDoc.ref, {
-                        usersInRoom: prevUsers
-                    }, { merge: true, mergeFields: ['usersInRoom'] }))
-                }
+                const usersInRoom = roomDoc.data().usersInRoom
+                delete usersInRoom[user.uid]
+                removeUserFromRoomsPromises.push(updateDoc(roomDoc.ref, { usersInRoom }))
             })
-            return await Promise.all(removeUserFromRoomsPromises)
+            return Promise.all(removeUserFromRoomsPromises)
         } catch (err) {
             throw err
         }
@@ -121,7 +118,7 @@ export const useUser = () => {
             }
         }
         return null
-    }, [user])
+    }, [user, userDoc])
 
     // Function to create a room
     const createRoom = useCallback(async (roomName: string) => {
@@ -130,7 +127,7 @@ export const useUser = () => {
                 // Create room and get ref to it
                 const roomCreatedRef = await addDoc(roomsRef, {
                     name: roomName,
-                    usersInRoom: [],
+                    usersInRoom: {},
                     shouldBeRemoved: true
                 })
 
@@ -155,6 +152,7 @@ export const useUser = () => {
         deleteRoom,
         roomCreated,
         sendText,
-        createRoom
+        createRoom,
+        userDoc
     }
 }
