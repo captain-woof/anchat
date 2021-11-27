@@ -1,11 +1,10 @@
 .header_and_progress {
-    min-height: 3rem;
-    height: max-content;
-    position: fixed;
+    height: var(--height-navbar);
+    position: sticky;
     width: 100%;
     top: 0;
     left: 0;
-    z-index: 99;
+    z-index: 110;
 }
 
 .progress_bar_container {
