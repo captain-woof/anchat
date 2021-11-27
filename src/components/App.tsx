@@ -35,6 +35,10 @@ export default function App() {
                     <Routes>
                         <Route path="/" element={!user ? <LandingPage /> : <Rooms />} />
                         <Route path='/room/:roomId' element={<Room />} />
+                        {/* TEST ROUTE */}
+                        {import.meta.env.DEV &&
+                            <Route path='/test' element={<Loading />} />
+                        }
                     </Routes>
                 </Suspense>
             </PageProgressProvider>
