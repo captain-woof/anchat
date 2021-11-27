@@ -54,13 +54,15 @@
   --tr-slow: all 0.75s ease-in-out;
   --tr-normal: all 0.5s ease-in-out;
   --tr-fast: all 0.25s linear;
+  /* Heights */
+  --height-navbar: 4rem;
   /* All colors */
   --color-blue-dark: #0d5d7a;
   --color-blue: #0a6b8e;
   --color-blue-light: #1e7696;
   --color-orange-dark: #dd9000;
-  --color-orange: #eea319;
-  --color-orange-light: #ffbf49;
+  --color-orange: #ffb01f;
+  --color-orange-light: #ffb84e;
   --color-white: #fdfdfd;
   --color-white-light: #ffffff;
   --color-white-dark: #fafafa;
