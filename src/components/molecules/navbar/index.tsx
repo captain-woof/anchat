@@ -11,10 +11,10 @@ import { usePageProgress } from '../../../hooks/page_progress'
 export default function Navbar() {
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const { user } = useUser()
-    const { progress } = usePageProgress()    
+    const { progress } = usePageProgress()
 
     return (
-        <div className={styles.header_and_progress}>
+        <div className={styles.header_and_progress} onMouseLeave={() => { setShowMenu(false) }}>
             <header className={styles.header}>
                 <Link to='' className={styles.title_container}>
                     <h5 className={styles.title}>
@@ -28,17 +28,20 @@ export default function Navbar() {
                         <MenuIcon className={styles.menu_icon} />
                     </div>
                     <ul className={cx(styles.menu_items, showMenu ? null : styles.closed)}>
-                        <Link to="about">
+                        <Link to="about" onClick={() => setShowMenu(false)}>
                             <li className={styles.menu_item}>About</li>
                         </Link>
 
                         {!!user &&
-                            <Link to="">
+                            <Link to="/" onClick={() => setShowMenu(false)}>
                                 <li className={styles.menu_item}>Rooms</li>
                             </Link>
                         }
 
-                        <li className={styles.menu_item} onClick={!!user ? handleLogout : handleLogin}>
+                        <li className={styles.menu_item} onClick={() => {
+                            setShowMenu(false)
+                            !!user ? handleLogout() : handleLogin()
+                        }}>
                             {!!user ? 'Logout' : 'Login'}
                         </li>
                     </ul>
