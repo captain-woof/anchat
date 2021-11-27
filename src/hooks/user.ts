@@ -12,7 +12,7 @@ export const useUser = () => {
 
     // Get room created
     const [userDoc] = useDocument(doc(getDB(), `/users/${user?.uid}`))
-    const roomCreated = useMemo(() => (userDoc ? userDoc.data()?.roomCreated as DocumentReference<DocumentData> : null), [userDoc])
+    const roomCreated = useMemo(() => (userDoc?.data()?.roomCreated as DocumentReference<DocumentData>), [userDoc])
 
     // Function to add user to room
     const addUserToRoom = useCallback(async (roomId: string) => {
@@ -32,35 +32,41 @@ export const useUser = () => {
 
     // Function to delete user's room
     const deleteRoom = useCallback(async () => {
-        if (!user) return null
-        if (!roomCreated) return null
-        if (!(await (getDoc(roomCreated))).data()?.shouldBeRemoved) return null
+        try {
+            if (user && roomCreated) {
+                const shouldRoomBeRemoved = (await getDoc(roomCreated)).data()?.shouldBeRemoved
+                if (!shouldRoomBeRemoved) return true
 
-        // Delete all messages in room
-        const messagesInRoom = await getDocs(query(
-            messagesRef,
-            where('room', '==', roomCreated)
-        ))
-        const deleteMessagesPromises: Promise<void>[] = []
-        messagesInRoom.forEach((messageInRoom) => {
-            deleteMessagesPromises.push(deleteDoc(messageInRoom.ref))
-        })
+                // Delete all messages in room
+                const messagesInRoom = await getDocs(query(
+                    messagesRef,
+                    where('room', '==', roomCreated)
+                ))
+                const deleteMessagesPromises: Promise<void>[] = []
+                messagesInRoom.forEach((messageInRoom) => {
+                    deleteMessagesPromises.push(deleteDoc(messageInRoom.ref))
+                })
 
-        // Delete room
-        const deleteRoomPromise = deleteDoc(roomCreated)
+                // Delete room
+                const deleteRoomPromise = deleteDoc(roomCreated)
 
-        // Set room created to null
-        let resetRoomCreatedPromise = null
-        if (!!userDoc) {
-            resetRoomCreatedPromise = setDoc(userDoc.ref, { roomCreated: null }, {
-                merge: true,
-                mergeFields: ['roomCreated']
-            })
+                // Set room created to null
+                let resetRoomCreatedPromise = null
+                if (!!userDoc) {
+                    resetRoomCreatedPromise = setDoc(userDoc.ref, { roomCreated: null }, {
+                        merge: true,
+                        mergeFields: ['roomCreated']
+                    })
+                }
+
+                // Resolve all promises
+                await Promise.all([...deleteMessagesPromises, deleteRoomPromise, resetRoomCreatedPromise])
+            }
+            return true
+        } catch {
+            return false
         }
-
-        // Resolve all promises
-        await Promise.all([...deleteMessagesPromises, deleteRoomPromise, resetRoomCreatedPromise])
-    }, [user])
+    }, [user, userDoc, roomCreated])
 
     // Function to remove user from room
     const removeUserFromRoom = useCallback(async (roomId: string) => {
@@ -119,22 +125,25 @@ export const useUser = () => {
 
     // Function to create a room
     const createRoom = useCallback(async (roomName: string) => {
-        if (!!user) {
+        if (!!user && !roomCreated) {
             try {
-                // If user has already made a room, return null
-                if (!!roomCreated) return null
-
-                return await addDoc(roomsRef, {
+                // Create room and get ref to it
+                const roomCreatedRef = await addDoc(roomsRef, {
                     name: roomName,
                     usersInRoom: [],
                     shouldBeRemoved: true
                 })
+
+                // Add room ref to user
+                userDoc && await setDoc(userDoc.ref, { roomCreated: roomCreatedRef }, { merge: true, mergeFields: ['roomCreated'] })
+
+                return roomCreatedRef
             } catch (err) {
                 throw err
             }
         }
         return null
-    }, [user])
+    }, [user, userDoc, roomCreated])
 
     return {
         user,
