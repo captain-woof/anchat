@@ -1,0 +1,122 @@
+/* BELOW STYLES FOR ROOMS PAGE */
+
+.title {
+    margin-bottom: var(--sp-400);
+}
+
+.button_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--sp-400) 0;
+}
+
+.global_room_button {
+    height: calc(var(--sp-600) * 1.4);
+    width: calc(var(--sp-600) * 4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    cursor: pointer;
+    transition: var(--tr-normal);
+    font-weight: 600;
+    position: relative;
+    padding: var(--sp-200) var(--sp-400);
+}
+
+.global_room_button>* {
+    width: 100%;
+}
+
+.global_room_button:hover {
+    background-color: var(--color-accent-light);
+}
+
+.global_room_button_text {
+    flex-grow: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.global_icon {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.global_room_button_people_num {
+    flex-grow: 1;
+    display: flex;
+    gap: 0.25rem;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: var(--fs-300);
+}
+
+.custom_room_button {
+    height: calc(var(--sp-600) * 1.4);
+    width: calc(var(--sp-600) * 4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    background-color: var(--color-bg-ele);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: var(--tr-normal);
+    font-weight: 600;
+    position: relative;
+    padding: var(--sp-200) var(--sp-400);
+    border: 2px solid var(--color-accent);
+    gap: 0.25rem;
+}
+
+@media (min-width: 768px) {
+    .custom_room_button,
+    .global_room_button {
+        width: calc(var(--sp-600) * 5);
+    }
+}
+
+/* BELOW STYLES FOR DIALOGS */
+
+.dialog {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialog_title {
+    margin: 0;
+}
+
+.dialog_caption {
+    color: var(--color-text);
+    text-align: center;
+}
+
+.dialog_label {
+    display: none;
+}
+
+.dialog_input {
+    width: 100%;
+    position: relative;
+    background-color: var(--color-bg-ele);
+    color: var(--color-text);
+    border-radius: 50rem;
+    padding: 0.5rem 1.25rem;
+    border: 2px solid var(--color-accent-light);
+}
