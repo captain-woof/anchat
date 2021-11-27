@@ -1,14 +1,15 @@
 .container {
     position: relative;
     width: 100%;
-    min-height: 100vh;
+    min-height: calc(100vh - var(--height-navbar));
 }
 
 .centered_container{
     position: relative;
     width: 100%;
-    min-height: 100vh;
+    min-height: calc(100vh - var(--height-navbar));
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
