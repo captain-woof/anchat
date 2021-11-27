@@ -1,0 +1,25 @@
+@keyframes rotate {
+    0% {
+        transform: rotateZ(0deg);
+    }
+    100% {
+        transform: rotateZ(360deg);
+    }
+}
+
+@keyframes change_color {
+    0% {
+        fill: var(--color-accent);
+    }
+    100% {
+        fill: var(--color-accent-light);
+    }
+}
+
+.spinner {
+    --dimension: 2.5rem;
+    height: var(--dimension);
+    width: var(--dimension);
+    animation: rotate 1.25s linear infinite,
+            change_color 1.25s linear infinite alternate;
+}
