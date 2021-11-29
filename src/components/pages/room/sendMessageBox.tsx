@@ -14,7 +14,7 @@ export default function SendMessageBox({ roomId, roomExists }: ISendMessageBox) 
     const { sendText, userDoc } = useUser()
 
     const handleSendText = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-        sendText(message.trim(), roomId)
+        sendText && sendText(message.trim(), roomId)
         e.preventDefault()
         setMessage('')
     }, [message, userDoc])
