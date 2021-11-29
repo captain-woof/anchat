@@ -4,14 +4,14 @@ import { useUser } from '../hooks/user'
 import { handleLogin } from '../lib/firebase'
 import styles from '../styles/home.module.css'
 import router from 'next/router'
-import LandingPageSeo from '../components/seo/landing_page'
+import MainSeo from '../components/seo/main'
 
 const Homepage = () => {
     const { user } = useUser()
 
     return (
         <>
-            <LandingPageSeo />
+            <MainSeo />
             <Container>
                 <main className={styles.call_to_action_container}>
                     <h1 className={styles.title}>Anchat</h1>

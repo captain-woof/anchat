@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-export default function LandingPageSeo() {
+export default function MainSeo() {
     return (
         <Head>
             <title>Anchat</title>
