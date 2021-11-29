@@ -4,7 +4,7 @@ import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, Do
 import { createContext, ReactNode, useCallback, useMemo } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { useDocument } from "react-firebase-hooks/firestore"
-import { UserInRoom } from "../../../types/user"
+import { UserInRoom } from "../../types/user"
 import { getDB, messagesRef, roomsRef } from "../../lib/firebase"
 
 interface IUserContext {
@@ -138,7 +138,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
             }
         }
         return null
-    }, [user, userDoc])
+    }, [user])
 
     // Function to create a room
     const createRoom = useCallback(async (roomName: string) => {
