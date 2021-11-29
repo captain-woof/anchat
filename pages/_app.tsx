@@ -9,6 +9,7 @@ import { getApp } from '@firebase/app'
 import { doc, setDoc } from '@firebase/firestore'
 import { getDB } from '../lib/firebase'
 import Pwa from '../components/pwa'
+import GoogleAnalytics from '../components/google-analytics'
 
 function MyApp({ Component, pageProps }: AppProps) {
   // If user arrives from login redirection, enter user data to database
@@ -30,6 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Pwa />
+      <GoogleAnalytics />
       <PageProgressProvider>
         <UserProvider>
           <Navbar />
