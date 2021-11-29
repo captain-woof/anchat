@@ -91,15 +91,6 @@ function Message({ body, displayPic, senderName, timestamp, own }: IMessage) {
     const timestampMoment = useMemo(() => moment(timestamp), [timestamp])
 
     const [timestampFormat, setTimestampFormat] = useState<'Do MMM, YY' | 'h:mm a'>('Do MMM, YY')
-    useEffect(() => {
-        const intervalHandle = setInterval(() => {
-            setTimestampFormat((prevFormat) => prevFormat === 'Do MMM, YY'
-                ? 'h:mm a'
-                : 'Do MMM, YY'
-            )
-        }, 8 * 1000)
-        return () => { clearInterval(intervalHandle) }
-    }, [])
 
     return (
         <figure className={own ? styles.message_container_me : styles.message_container_other} onClick={() => {

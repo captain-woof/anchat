@@ -59,9 +59,10 @@ export const useRoomSession = (roomId: string) => {
             }
         }
         if (!!user && roomExists) {
+            console.log('starting room session')
             addUserToRoom && addUserToRoom(roomId)
             document.addEventListener('visibilitychange', handleVisibilityChange)
             return () => { document.removeEventListener('visibilitychange', handleVisibilityChange) }
         }
-    }, [user])
+    }, [user, roomExists])
 }
