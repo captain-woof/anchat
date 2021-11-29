@@ -39,6 +39,7 @@ export default function App() {
                             <Route path="/rooms" element={<Rooms />} />
                             <Route path='/room/:roomId' element={<Room />} />
                             <Route path="/login" element={<LoginPage />} />
+                            <Route path="*" element={<NotFound />} />
                             {/* TEST ROUTE */}
                             {import.meta.env.DEV &&
                                 <Route path='/test' element={<LoginPage />} />
@@ -56,3 +57,4 @@ const LandingPage = lazy(() => import('./pages/landing'))
 const Rooms = lazy(() => import('./pages/rooms'))
 const Room = lazy(() => import('./pages/room'))
 const LoginPage = lazy(() => import('./pages/login'))
+const NotFound = lazy(() => import('./pages/notFound'))
