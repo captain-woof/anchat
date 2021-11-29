@@ -233,12 +233,6 @@
     align-items: center;
 }
 
-.display_image_container>* {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
 .message_container_other .display_image_container {
     background-color: var(--color-bg-ele);
     box-shadow: var(--shadow);
