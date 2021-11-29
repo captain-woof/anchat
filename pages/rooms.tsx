@@ -87,7 +87,7 @@ export default function Rooms() {
                                     {globalRoom.name}
                                 </span>
                                 <span className={styles.global_room_button_people_num}>
-                                    <PeopleIcon /> {Object.keys(globalRoom.usersInRoom).length}
+                                    <PeopleIcon /> {Object.values(globalRoom.usersInRoom).filter((userInRoom) => userInRoom.presentInRoom).length}
                                 </span>
                             </button>
                         </a></Link>
