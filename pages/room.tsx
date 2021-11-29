@@ -13,6 +13,7 @@ import { useIntersectionRevealer } from "react-intersection-revealer"
 import moment from "moment"
 import cx from 'classnames'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import RoomSeo from '../components/seo/room'
 
 // To get roomId
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
@@ -28,7 +29,7 @@ export default function Room({ roomId }: InferGetServerSidePropsType<typeof getS
     const { user, userPending } = useUser()
     useRoomSession(roomId as string)
     const [inviteDialogVisible, setInviteDialogVisible] = useState<boolean>(true)
-    const { roomExists } = useRoom(roomId as string)
+    const { roomExists, room: { name } } = useRoom(roomId as string)
 
     /* Redirect to login page if unauthenticated */
     useEffect(() => {
@@ -38,17 +39,20 @@ export default function Room({ roomId }: InferGetServerSidePropsType<typeof getS
     }, [roomId, user, userPending])
 
     return (
-        <Container style={{
-            height: 'calc(100vh - var(--height-navbar))',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
-        }}>
-            <InviteDialog roomId={roomId as string} roomExists={roomExists} inviteDialogVisible={inviteDialogVisible} setInviteDialogVisible={setInviteDialogVisible} />
-            <RoomDetails roomId={roomId as string} setInviteDialogVisible={setInviteDialogVisible} roomExists={roomExists} />
-            <MessagesScrollView roomId={roomId as string} roomExists={roomExists} />
-            <SendMessageBox roomId={roomId as string} roomExists={roomExists} />
-        </Container>
+        <>
+            <RoomSeo roomName={name}/>
+            <Container style={{
+                height: 'calc(100vh - var(--height-navbar))',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+            }}>
+                <InviteDialog roomId={roomId as string} roomExists={roomExists} inviteDialogVisible={inviteDialogVisible} setInviteDialogVisible={setInviteDialogVisible} />
+                <RoomDetails roomId={roomId as string} setInviteDialogVisible={setInviteDialogVisible} roomExists={roomExists} />
+                <MessagesScrollView roomId={roomId as string} roomExists={roomExists} />
+                <SendMessageBox roomId={roomId as string} roomExists={roomExists} />
+            </Container>
+        </>
     )
 }
 
