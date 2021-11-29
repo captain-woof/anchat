@@ -23,6 +23,7 @@ export default function MainSeo() {
             <meta name="twitter:site" content="@realCaptainWoof" />
             <meta name="twitter:creator" content="@realCaptainWoof" />
             <meta name="theme-color" content="#ffb01f" />
+            <meta name="google-site-verification" content="UNvdFl_8l4GAQdhkkEBQAedGhZ6xZlRWf3kASVbGRj8" />
         </Head>
     )
 }
