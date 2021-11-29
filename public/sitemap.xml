@@ -1,7 +1,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
 <url>
-    <loc>https://anchat.vercel.app/</loc>
+    <loc>https://anchat.vercel.app</loc>
     <lastmod>2021-11-29T16:00:00+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>2.0</priority>
