@@ -19,6 +19,10 @@ export default function LandingPage() {
                     {!user ? "Join/Login" : "Rooms"}
                 </Button>
             </main>
+            <aside className={styles.background_container} />
+            <p className={styles.bg_credit}>
+                <a href='https://www.freepik.com/vectors/banner'>Background art by svstudioart</a>
+            </p>
         </Container>
     )
 }
