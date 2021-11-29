@@ -4,7 +4,7 @@ import styles from './styles.module.css'
 import { MdPeople as PeopleIcon, MdOutlinePeopleAlt as JoinRoomIcon } from 'react-icons/md'
 import { GiEarthAmerica as GlobalIcon } from 'react-icons/gi'
 import { BiMessageRoundedAdd as CreateRoomIcon } from 'react-icons/bi'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import RoomsDialog from './rooms_dialog'
 import { useUser } from '../../../hooks/user'
 import { usePageProgress } from '../../../hooks/page_progress'
@@ -12,7 +12,7 @@ import { useNavigate, Link } from 'react-router-dom'
 
 export default function Rooms() {
     const { rooms } = useRooms()
-    const { createRoom, deleteRoom, roomCreated } = useUser()
+    const { createRoom, deleteRoom, roomCreated, user, userPending } = useUser()
     const { setProgress } = usePageProgress()
     const [createRoomDialogShow, setCreateRoomDialogShow] = useState<boolean>(false)
     const [joinRoomDialogShow, setJoinRoomDialogShow] = useState<boolean>(false)
@@ -20,23 +20,30 @@ export default function Rooms() {
     const [text, setText] = useState<string>('')
     const navigate = useNavigate()
 
+    /* Redirect to login page if unauthenticated */
+    useEffect(() => {
+        if (!user && !userPending) {
+            navigate('/login', { state: '/rooms' })
+        }
+    }, [user, userPending])
+
     /* Custom room functions */
     const handleCreateRoom = useCallback(async () => {
         setProgress(true)
-        const roomCreatedRef = await createRoom(text)
+        const roomCreatedRef = !!createRoom && await createRoom(text)
         setCreateRoomDialogShow(false)
         setProgress(false)
-        !!roomCreatedRef ? navigate(`/room/${roomCreatedRef?.id}`) : setErrorShow(true)
+        !!roomCreatedRef ? navigate(`/room/${roomCreatedRef?.id}`, { state: '/rooms' }) : setErrorShow(true)
     }, [text, roomCreated])
 
     const handleJoinRoom = useCallback(() => {
         setCreateRoomDialogShow(false)
-        navigate(`/room/${text}`)
+        navigate(`/room/${text}`, { state: '/rooms' })
     }, [text])
 
     const handleDeleteRoom = useCallback(async () => {
         setProgress(true)
-        const deleteRes = await deleteRoom()
+        const deleteRes = !!deleteRoom && await deleteRoom()
         if (typeof deleteRes === 'boolean' && !deleteRes) setErrorShow(true)
         setProgress(false)
     }, [roomCreated])

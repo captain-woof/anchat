@@ -14,7 +14,7 @@ export default function SendMessageBox({ roomId, roomExists }: ISendMessageBox) 
     const { sendText, userDoc } = useUser()
 
     const handleSendText = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-        sendText(message, roomId)
+        sendText(message.trim(), roomId)
         e.preventDefault()
         setMessage('')
     }, [message, userDoc])
@@ -22,7 +22,7 @@ export default function SendMessageBox({ roomId, roomExists }: ISendMessageBox) 
     return (
         <form className={styles.send_message_box_container} onSubmit={handleSendText}>
             <input className={styles.message_box} value={message} onChange={(e) => { setMessage(e.target.value) }} placeholder="Type your message..." disabled={!roomExists} />
-            <button className={styles.send_button_container} disabled={!roomExists}>
+            <button className={styles.send_button_container} disabled={!roomExists || message.trim() === ''} type='submit'>
                 <SendIcon className={cx(styles.send_icon, message !== '' ? styles.active : null)} />
             </button>
         </form>

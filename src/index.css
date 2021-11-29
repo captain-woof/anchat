@@ -118,7 +118,7 @@ html, body {
 }
 
 /* Remove margins, paddings and setting default font-weight */
-body, h1, h2, h3, h4, h5, p, button, textarea, caption, section {
+body, h1, h2, h3, h4, h5, p, button, textarea, caption, section, figure, main {
   margin: 0;
   padding: 0;
 }
@@ -165,4 +165,8 @@ h1 {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+p, span {
+  color: var(--color-text);
 }

@@ -8,6 +8,7 @@ import { getDB } from '../lib/firebase'
 import Navbar from './molecules/navbar'
 import Loading from './pages/loading'
 import PageProgressProvider from './providers/page_progress'
+import UserProvider from './providers/user'
 
 export default function App() {
     const { user } = useUser()
@@ -30,17 +31,21 @@ export default function App() {
     return (
         <BrowserRouter>
             <PageProgressProvider>
-                <Navbar />
-                <Suspense fallback={<Loading />}>
-                    <Routes>
-                        <Route path="/" element={!user ? <LandingPage /> : <Rooms />} />
-                        <Route path='/room/:roomId' element={<Room />} />
-                        {/* TEST ROUTE */}
-                        {import.meta.env.DEV &&
-                            <Route path='/test' element={<Loading />} />
-                        }
-                    </Routes>
-                </Suspense>
+                <UserProvider>
+                    <Navbar />
+                    <Suspense fallback={<Loading />}>
+                        <Routes>
+                            <Route path="/" element={<LandingPage />} />
+                            <Route path="/rooms" element={<Rooms />} />
+                            <Route path='/room/:roomId' element={<Room />} />
+                            <Route path="/login" element={<LoginPage />} />
+                            {/* TEST ROUTE */}
+                            {import.meta.env.DEV &&
+                                <Route path='/test' element={<LoginPage />} />
+                            }
+                        </Routes>
+                    </Suspense>
+                </UserProvider>
             </PageProgressProvider>
         </BrowserRouter>
     )
@@ -50,3 +55,4 @@ export default function App() {
 const LandingPage = lazy(() => import('./pages/landing'))
 const Rooms = lazy(() => import('./pages/rooms'))
 const Room = lazy(() => import('./pages/room'))
+const LoginPage = lazy(() => import('./pages/login'))

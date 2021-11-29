@@ -1,7 +1,8 @@
-import { doc, query } from "@firebase/firestore"
-import { useEffect, useState } from "react"
+import { doc, getDoc, query, where } from "@firebase/firestore"
+import { useEffect, useMemo, useState } from "react"
 import { useCollection, useDocument } from "react-firebase-hooks/firestore"
 import { Room } from "../../types/room"
+import { UserInRoom } from "../../types/user"
 import { getDB, roomsRef } from "../lib/firebase"
 import { useUser } from "./user"
 
@@ -19,34 +20,47 @@ export const useRooms = () => {
     }
 }
 
+// Used to see a specific room
+export const useRoom = (roomId: string) => {
+    const [room, roomPending, roomError] = useDocument(doc(getDB(), `/rooms/${roomId}`))
+    const numOfActiveUsers = useMemo(() => {
+        if (!!(room?.data()?.usersInRoom)) {
+            return Object.entries(room?.data()?.usersInRoom as { [key: string]: UserInRoom })
+                .filter(([, userInRoom]) => (userInRoom.presentInRoom))
+                .length
+        } else {
+            return 0
+        }
+    }, [room])
+    return {
+        room: {
+            ...room?.data(),
+            numOfActiveUsers
+        } as Room,
+        roomPending,
+        roomError,
+        roomExists: room ? room.exists() : false
+    }
+}
+
 // Used to add/remove user in room
 export const useRoomSession = (roomId: string) => {
     const { user, addUserToRoom, removeUserFromRoom } = useUser()
-    const [roomExists, setRoomExists] = useState<boolean>(false)
-    const [roomDoc] = useDocument(doc(getDB(), `/rooms/${roomId}`))
+    const { roomExists } = useRoom(roomId)
 
     // Handles user add/remove from room upon visibility change
     useEffect(() => {
         async function handleVisibilityChange(): Promise<any> {
             if (document.visibilityState == 'hidden') {
-                await removeUserFromRoom(roomId)
+                !!removeUserFromRoom && await removeUserFromRoom(roomId)
             } else {
-                await addUserToRoom(roomId)
+                !!addUserToRoom && await addUserToRoom(roomId)
             }
         }
         if (!!user && roomExists) {
-            addUserToRoom(roomId)
+            addUserToRoom && addUserToRoom(roomId)
             document.addEventListener('visibilitychange', handleVisibilityChange)
             return () => { document.removeEventListener('visibilitychange', handleVisibilityChange) }
         }
-    }, [user, roomExists])
-
-    // Keeps track if room exists
-    useEffect(() => {
-        setRoomExists(!!roomDoc)
-    }, [roomDoc])
-
-    return {
-        roomExists
-    }
+    }, [user])
 }

@@ -1,10 +1,11 @@
 import { DocumentReference, DocumentData } from 'firebase/firestore'
-import { User } from '../types/user'
+import { UserInRoom } from '../types/user'
 
 export type Room = {
     name: string,
-    usersInRoom: { [key: string]: User },
+    usersInRoom: { [key: string]: UserInRoom },
     shouldBeRemoved: boolean,
     id?: string,
-    ref?: DocumentReference<DocumentData>
+    ref?: DocumentReference<DocumentData>,
+    numOfActiveUsers?: number
 }

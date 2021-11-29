@@ -6,3 +6,10 @@ export type User = {
     displayPic: string
     roomCreated: DocumentReference<DocumentData> | null
 }
+
+export type UserInRoom = {
+    uid: string
+    name: string
+    displayPic: string
+    presentInRoom: boolean
+}
