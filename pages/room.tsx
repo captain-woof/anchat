@@ -40,7 +40,7 @@ export default function Room({ roomId }: InferGetServerSidePropsType<typeof getS
 
     return (
         <>
-            <RoomSeo roomName={name}/>
+            <RoomSeo roomName={name} />
             <Container style={{
                 height: 'calc(100vh - var(--height-navbar))',
                 display: 'flex',
@@ -223,7 +223,7 @@ function SendMessageBox({ roomId, roomExists }: ISendMessageBox) {
 
     return (
         <form className={styles.send_message_box_container} onSubmit={handleSendText}>
-            <label htmlFor="message-box" className={styles.sentinel}>Type your message</label>
+            <label style={{ display: 'none' }} htmlFor="message-box" className={styles.sentinel}>Type your message</label>
             <input id="message-box" className={styles.message_box} value={message} onChange={(e) => { setMessage(e.target.value) }} placeholder="Type your message..." disabled={!roomExists} />
             <button className={styles.send_button_container} disabled={!roomExists || message.trim() === ''} type='submit' aria-labelledby="Send button">
                 <SendIcon className={cx(styles.send_icon, message !== '' ? styles.active : null)} />
