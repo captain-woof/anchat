@@ -82,14 +82,14 @@ export default function Rooms() {
                         .sort((room1, room2) => room1.name < room2.name ? -1 : 1)
                         .map((globalRoom) => (
                             <Link passHref href={`../room?roomId=${globalRoom.id}`} key={globalRoom.id}><a>
-                                <button className={styles.global_room_button}>
+                                <button className={styles.global_room_button} aria-labelledby={globalRoom.name}>
                                     <div className={styles.global_icon}>
                                         <GlobalIcon />
                                     </div>
                                     <span className={styles.global_room_button_text}>
                                         {globalRoom.name}
                                     </span>
-                                    <span className={styles.global_room_button_people_num}>
+                                    <span className={styles.global_room_button_people_num} aria-labelledby="Active users in room now">
                                         <PeopleIcon /> {Object.values(globalRoom.usersInRoom).filter((userInRoom) => userInRoom.presentInRoom).length}
                                     </span>
                                 </button>
@@ -97,12 +97,12 @@ export default function Rooms() {
                         ))
                     }
                     {/* Create room button */}
-                    <button className={styles.custom_room_button} onClick={() => { setCreateRoomDialogShow(true) }}>
+                    <button aria-labelledby="Create a new room" className={styles.custom_room_button} onClick={() => { setCreateRoomDialogShow(true) }}>
                         <CreateRoomIcon /> Create a room
                     </button>
 
                     {/* Join room button */}
-                    <button className={styles.custom_room_button} onClick={() => { setJoinRoomDialogShow(true) }}>
+                    <button aria-labelledby="Join a room" className={styles.custom_room_button} onClick={() => { setJoinRoomDialogShow(true) }}>
                         <JoinRoomIcon /> Join a room
                     </button>
                 </div>

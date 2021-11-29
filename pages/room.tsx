@@ -72,8 +72,8 @@ function RoomDetails({ roomId, setInviteDialogVisible, roomExists }: IRoomDetail
 
     return (
         <div className={styles.room_details_container} onClick={() => { setInviteDialogVisible(true) }}>
-            <div className={styles.room_name}>{roomExists ? name : "Room does not exist!"}</div>
-            <div className={styles.room_active_users_num}>
+            <div aria-labelledby="Room name" aria-describedby={roomExists ? name : "Room does not exist!"} className={styles.room_name}>{roomExists ? name : "Room does not exist!"}</div>
+            <div aria-labelledby="Number of active users in room" aria-describedby={numOfActiveUsers?.toString()} className={styles.room_active_users_num}>
                 <PeopleIcon />
                 {numOfActiveUsers}
             </div>
@@ -97,7 +97,7 @@ function Message({ body, displayPic, senderName, timestamp, own }: IMessage) {
     const [timestampFormat, setTimestampFormat] = useState<'Do MMM, YY' | 'h:mm a'>('Do MMM, YY')
 
     return (
-        <figure className={own ? styles.message_container_me : styles.message_container_other} onClick={() => {
+        <figure aria-labelledby="Message" aria-describedby={`${senderName} says ${body}`} className={own ? styles.message_container_me : styles.message_container_other} onClick={() => {
             setTimestampFormat(prevFormat => prevFormat === 'Do MMM, YY' ? 'h:mm a' : 'Do MMM, YY')
         }}>
             <div className={styles.display_image_container}>
@@ -177,7 +177,7 @@ function MessagesScrollView({ roomId, roomExists }: IMessagesScrollView) {
     }, [messages.length, sentinelScrollToRef.current])
 
     return (
-        <section className={cx(styles.messages_scrollview_container, !roomExists && styles.center)} ref={messagesScrollViewRef}>
+        <section className={cx(styles.messages_scrollview_container, !roomExists && styles.center)} ref={messagesScrollViewRef} aria-labelledby="Messages in room">
             {!roomExists
                 ? <p>Room does not exist!</p>
                 : (
@@ -223,8 +223,9 @@ function SendMessageBox({ roomId, roomExists }: ISendMessageBox) {
 
     return (
         <form className={styles.send_message_box_container} onSubmit={handleSendText}>
-            <input className={styles.message_box} value={message} onChange={(e) => { setMessage(e.target.value) }} placeholder="Type your message..." disabled={!roomExists} />
-            <button className={styles.send_button_container} disabled={!roomExists || message.trim() === ''} type='submit'>
+            <label htmlFor="message-box" className={styles.sentinel}>Type your message</label>
+            <input id="message-box" className={styles.message_box} value={message} onChange={(e) => { setMessage(e.target.value) }} placeholder="Type your message..." disabled={!roomExists} />
+            <button className={styles.send_button_container} disabled={!roomExists || message.trim() === ''} type='submit' aria-labelledby="Send button">
                 <SendIcon className={cx(styles.send_icon, message !== '' ? styles.active : null)} />
             </button>
         </form>
